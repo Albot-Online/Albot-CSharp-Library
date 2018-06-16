@@ -17,7 +17,6 @@ namespace Albot {
         protected abstract void InitGridDimensions();
 
         public bool GameOver() {
-            Console.WriteLine(GetState() + "ENDOFSTRING");
             if (GetState() == Fields.gameOver)
                 return true;
             else
