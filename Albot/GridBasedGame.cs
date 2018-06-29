@@ -10,40 +10,53 @@ namespace Albot {
 
         protected int width, height;
 
+        private string state;
+        private bool stateUpToDate = false;
+
         public GridBasedGame(string ip = "127.0.0.1", int port = 4000) : base(ip, port) {
             InitGridDimensions();
         }
 
         protected abstract void InitGridDimensions();
+        
+        // Multiple accesses for state would, without this, get into an infinite blocking receive.
+        private string GetState() {
+            if (stateUpToDate)
+                return state;
 
-        public bool GameOver() {
-            if (GetState() == Fields.gameOver)
-                return true;
-            else
-                return false;
+            state = ReceiveState();
+            stateUpToDate = true;
+            return state;
+        }
+
+        public new bool GameOver() {
+            GetState();
+            return base.GameOver();
         }
 
         // Blocking receive
         public GridBoard GetNextBoard() {
-            string state = GetState();
-            return new GridBoard(width, height, ParseResponseState(state));
+            
+            return new GridBoard(width, height, ParseResponseState(GetState()));
         }
 
         public void MakeMove(int move) {
+            stateUpToDate = false;
+
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.makeMove),
                 new JProperty(Fields.move, move)
                 );
             SendCommand(jsonCommand.ToString());
         }
-
+        
         public int EvaluateBoard(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.evalBoard),
                 new JProperty(Fields.board, board.Serialize())
                 );
 
-            string winner = SendCommandRecvState(jsonCommand.ToString());
+            string winner = SendCommandReceiveState(jsonCommand.ToString());
             return ParseResponseWinner(winner);
         }
 
@@ -53,7 +66,7 @@ namespace Albot {
                 new JProperty(Fields.board, board.Serialize())
                 );
 
-            string moves = SendCommandRecvState(jsonCommand.ToString());
+            string moves = SendCommandReceiveState(jsonCommand.ToString());
             return ParseResponsePossibleMoves(moves);
         }
         
@@ -65,7 +78,7 @@ namespace Albot {
                 new JProperty(Fields.move, move)
                 );
 
-            string state = SendCommandRecvState(jsonCommand.ToString());
+            string state = SendCommandReceiveState(jsonCommand.ToString());
             return ParseResponseState(state);
         }
 

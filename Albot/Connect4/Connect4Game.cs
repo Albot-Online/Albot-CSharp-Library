@@ -6,8 +6,8 @@
         }
 
         protected override void InitGridDimensions() {
-            this.width = 7;
-            this.height = 6;
+            this.width = Connect4Constants.Fields.boardWidth;
+            this.height = Connect4Constants.Fields.boardHeight;
         }
 
         public Connect4Board MakeMoveGetNextBoard(int move) {

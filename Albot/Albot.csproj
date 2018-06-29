@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageTags>Albot Game Library API</PackageTags>
+    <Description>A library to easily connect to Albot. Also provides basic game logic.</Description>
+    <NeutralLanguage></NeutralLanguage>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
