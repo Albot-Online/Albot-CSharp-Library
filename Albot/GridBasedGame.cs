@@ -13,8 +13,11 @@ namespace Albot {
         private string state;
         private bool stateUpToDate = false;
 
+        private const string BOARD = "Board";
+
         public GridBasedGame(string ip = "127.0.0.1", int port = 4000) : base(ip, port) {
             InitGridDimensions();
+            Console.WriteLine("Connected, waiting for game to start...");
         }
 
         protected abstract void InitGridDimensions();
@@ -34,12 +37,17 @@ namespace Albot {
             return base.GameOver();
         }
 
-        // Blocking receive
+        // Blocking receive 
         public GridBoard GetNextBoard() {
-            
-            return new GridBoard(width, height, ParseResponseState(GetState()));
+            string state = GetState();
+            if (GameOver())
+                return null;
+            return new GridBoard(width, height, ParseResponseState(state));
         }
 
+        /// <summary>
+        /// Makes the move given.
+        /// </summary>
         public void MakeMove(int move) {
             stateUpToDate = false;
 
@@ -49,21 +57,27 @@ namespace Albot {
                 );
             SendCommand(jsonCommand.ToString());
         }
-        
+
+        /// <summary>
+        /// Returns the state of the board: 1 if you win, -1 if you lose, else 0.
+        /// </summary>
         public int EvaluateBoard(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.evalBoard),
-                new JProperty(Fields.board, board.Serialize())
+                new JProperty(BOARD, board.Serialize())
                 );
 
             string winner = SendCommandReceiveState(jsonCommand.ToString());
             return ParseResponseWinner(winner);
         }
 
+        /// <summary>
+        /// Returns a list of legal moves according to the board given.
+        /// </summary>
         public List<int> GetPossibleMoves(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.getPossMoves),
-                new JProperty(Fields.board, board.Serialize())
+                new JProperty(BOARD, board.Serialize())
                 );
 
             string moves = SendCommandReceiveState(jsonCommand.ToString());
@@ -73,7 +87,7 @@ namespace Albot {
         public GridBoard SimulateMove(GridBoard board, int player, int move) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.simMove),
-                new JProperty(Fields.board, board.Serialize()),
+                new JProperty(BOARD, board.Serialize()),
                 new JProperty(Fields.player, player.ToString()),
                 new JProperty(Fields.move, move)
                 );
@@ -84,12 +98,17 @@ namespace Albot {
 
         private GridBoard ParseResponseState(string response) {
             JObject jResponse = JObject.Parse(response);
-            return new GridBoard(width, height, jResponse.GetValue(Fields.board).ToString());
+            //Console.WriteLine(jResponse.ToString());
+            string serializedGrid = jResponse.GetValue(BOARD).ToString();
+            //Console.WriteLine("Serialized grid: " + serializedGrid);
+            return new GridBoard(width, height, serializedGrid);
         }
 
         // Optimize?
         private List<int> ParseResponsePossibleMoves(string response) {
+            //Console.WriteLine(response);
             JObject jResponse = JObject.Parse(response);
+            //Console.WriteLine(jResponse.ToString());
             string moves = jResponse.GetValue(Fields.possibleMoves).ToString();
             return JsonConvert.DeserializeObject<List<int>>(moves);
         }

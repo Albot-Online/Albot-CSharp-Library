@@ -6,6 +6,9 @@ namespace Albot {
 
     public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
 
+    /// <summary>
+    /// Handles connection and transporting data between client and bot.
+    /// </summary>
     public class AlbotConnection {
 
         private NetworkStream stream;
@@ -20,8 +23,10 @@ namespace Albot {
             };
             stream = client.GetStream();
         }
-
-        // Blocking receive for new state
+        
+        /// <summary>
+        /// Blocking receive call for new state as raw string.
+        /// </summary>
         public string ReceiveState() {
             Byte[] data = new byte[bufferSize];
 
@@ -42,22 +47,34 @@ namespace Albot {
 
         // Make move, should not be blocking? (It should be async)
         //public void SendCommand(int move) {SendCommand(move.ToString());}
+        /// <summary>
+        /// Sends the string to the client as a raw string.
+        /// </summary>
         public void SendCommand(string jsonCommand) {
             byte[] response = Encoding.Default.GetBytes(jsonCommand);
             stream.Write(response, 0, response.Length);
         }
 
         //public string SendCommandRecvState(int command) { return SendCommandRecvState(command.ToString()); }
+        /// <summary>
+        /// Sends command and then does a blocking receive for a response.
+        /// </summary>
         public string SendCommandReceiveState(string jsonCommand) {
             SendCommand(jsonCommand);
             return ReceiveState();
         }
 
+        /// <summary>
+        /// Sends a command to restart the game.
+        /// </summary>
         public void RestartGame() {
             Console.WriteLine("Restarting game...");
             SendCommand(Constants.Actions.restartGame);
         }
 
+        /// <summary>
+        /// Returns true if game is over, make sure to check this after receiving the state.
+        /// </summary>
         public bool GameOver() {
             return gameOver;
         }

@@ -9,7 +9,7 @@ namespace Albot {
         public GridBoard(int width, int height, string serializedGrid) {
             WIDTH = width;
             HEIGHT = height;
-            string[] cells = serializedGrid.Split(' ');
+            string[] cells = serializedGrid.TrimEnd().Split(' ');
 
             grid = new int[width, height];
             IterateBoard(
