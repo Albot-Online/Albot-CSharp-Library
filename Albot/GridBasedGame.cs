@@ -59,9 +59,9 @@ namespace Albot {
         }
 
         /// <summary>
-        /// Returns the state of the board: 1 if you win, -1 if you lose, else 0.
+        /// Returns the state of the board. (PlayerWon|EnemyWon|Draw|Ongoing)
         /// </summary>
-        public int EvaluateBoard(GridBoard board) {
+        public BoardState EvaluateBoard(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.evalBoard),
                 new JProperty(BOARD, board.Serialize())
@@ -81,6 +81,7 @@ namespace Albot {
                 );
 
             string moves = SendCommandReceiveState(jsonCommand.ToString());
+            //Console.WriteLine("Response possmoves: \n" + moves + "\n");
             return ParseResponsePossibleMoves(moves);
         }
         
@@ -113,10 +114,10 @@ namespace Albot {
             return JsonConvert.DeserializeObject<List<int>>(moves);
         }
 
-        private int ParseResponseWinner(string response) {
+        private BoardState ParseResponseWinner(string response) {
             JObject jResponse = JObject.Parse(response);
-            string winner = jResponse.GetValue(Fields.winner).ToString();
-            return int.Parse(winner);
+            string boardState = jResponse.GetValue(Fields.boardState).ToString();
+            return (BoardState)Enum.Parse(typeof(BoardState), boardState);
         }
     }
 

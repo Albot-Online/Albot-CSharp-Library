@@ -3,9 +3,7 @@ using System.Text;
 using System.Net.Sockets;
 
 namespace Albot {
-
-    public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
-
+    
     /// <summary>
     /// Handles connection and transporting data between client and bot.
     /// </summary>
@@ -13,8 +11,12 @@ namespace Albot {
 
         private NetworkStream stream;
         private bool gameOver = false;
+        private int winner;
         private const int bufferSize = 1024;
 
+        /// <summary>
+        /// Creates and handles the TCP connection with the client.
+        /// </summary>
         public AlbotConnection(string ip = "127.0.0.1", int port = 4000) {
 
             TcpClient client = new TcpClient(ip, port) {
@@ -78,20 +80,35 @@ namespace Albot {
         public bool GameOver() {
             return gameOver;
         }
+        /// <summary>
+        /// Returns winner, 1 if you won, -1 if you lost, 0 if draw. Call this after GameOver() is true.
+        /// </summary>
+        public int GetWinner() {
+            return winner;
+        }
 
         private void HandleGameOverCheck(string incomingData) {
             incomingData = incomingData.Trim();
             if (incomingData.Length >= 8 && incomingData.Substring(0, 8) == Constants.Fields.gameOver) {
-                if (incomingData.EndsWith("-1"))
+                if (incomingData.EndsWith("-1")) {
+                    winner = -1;
                     Console.WriteLine("You lost!");
-                else if (incomingData.EndsWith("1"))
+                } else if (incomingData.EndsWith("1")) {
+                    winner = 1;
                     Console.WriteLine("You won!");
-                else
+                } else if (incomingData.EndsWith("0")) {
+                    winner = 0;
                     Console.WriteLine("Draw!");
+                } else
+                    Console.WriteLine("Game Over!");
 
                 gameOver = true;
             }
         }
 
     }
+    /// <summary>
+    /// Whether game is over and if so, who the winner is.
+    /// </summary>
+    public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
 }
