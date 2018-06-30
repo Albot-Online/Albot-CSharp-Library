@@ -52,8 +52,8 @@ namespace Albot {
         /// <summary>
         /// Sends the string to the client as a raw string.
         /// </summary>
-        public void SendCommand(string jsonCommand) {
-            byte[] response = Encoding.Default.GetBytes(jsonCommand);
+        public void SendCommand(string command) {
+            byte[] response = Encoding.Default.GetBytes(command);
             stream.Write(response, 0, response.Length);
         }
 
@@ -61,8 +61,8 @@ namespace Albot {
         /// <summary>
         /// Sends command and then does a blocking receive for a response.
         /// </summary>
-        public string SendCommandReceiveState(string jsonCommand) {
-            SendCommand(jsonCommand);
+        public string SendCommandReceiveState(string command) {
+            SendCommand(command);
             return ReceiveState();
         }
 
