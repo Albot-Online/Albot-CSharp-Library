@@ -20,17 +20,12 @@ namespace Albot.Snake {
         }
 
         public struct PossibleMoves {
-            public List<string> player;
-            public List<string> enemy;
+            public List<string> playerMoves, enemyMoves;
         }
 
         public struct BoardStruct {
             public Placement player, enemy;
             public List<Position> blocked;
-        }
-
-        public struct PossibleMovesResponse {
-            public List<string> playerMoves, enemyMoves;
         }
 
         public struct MovesToSimulate {

@@ -14,7 +14,7 @@ namespace Albot.Snake {
     internal static class SnakeJsonHandler {
         private static JsonSerializer serializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
 
-        internal static JObject SerializeBoard(SnakeBoard board) {
+        private static JObject SerializeBoard(SnakeBoard board) {
             JObject jObject = new JObject(
                 new JProperty(JProtocol.player,
                     JObject.FromObject(board.playerPlacement)),
@@ -77,12 +77,11 @@ namespace Albot.Snake {
             //Console.WriteLine("Response state: " + "\n" + jResponse.ToString());
             return jResponse.ToObject<BoardStruct>();
         }
-
+        
         internal static PossibleMoves ParseResponsePossibleMoves(string response) {
-            PossibleMovesResponse respStruct = JsonConvert.DeserializeObject<PossibleMovesResponse>(response);
+            PossibleMoves possMoves = JsonConvert.DeserializeObject<PossibleMoves>(response);
             //Console.WriteLine("Response possMoves: " + "\n" + JObject.Parse(response).ToString());
-            PossibleMoves moves = new PossibleMoves { player = respStruct.playerMoves, enemy = respStruct.enemyMoves };
-            return moves;
+            return possMoves;
         }
         
         internal static SnakeBoard ParseResponseSimulate(string response) {

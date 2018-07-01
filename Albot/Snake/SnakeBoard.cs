@@ -20,22 +20,19 @@ namespace Albot.Snake {
         public SnakeBoard(BoardStruct boardStruct) {
             ExtractResponseInfo(boardStruct);
         }
-        public SnakeBoard(Placement player, Placement enemy, List<Position> blockedList) {
-            playerPlacement = player;
-            enemyPlacement = enemy;
-            foreach (Position pos in blockedList)
-                blocked[pos.x, pos.y] = true;
-        }
         // Add constructors for users?
 
         private void ExtractResponseInfo(BoardStruct response) {
             playerPlacement = response.player;
             enemyPlacement = response.enemy;
-            blocked[playerPlacement.x, playerPlacement.y] = true;
-            blocked[enemyPlacement.x, enemyPlacement.y] = true;
+            if(CoordsInBounds(playerPlacement.x, playerPlacement.y))
+                blocked[playerPlacement.x, playerPlacement.y] = true;
+            if(CoordsInBounds(enemyPlacement.x, enemyPlacement.y))
+                blocked[enemyPlacement.x, enemyPlacement.y] = true;
 
             foreach (Position pos in response.blocked) {
-                blocked[pos.x, pos.y] = true;
+                if(CoordsInBounds(pos.x, pos.y))
+                    blocked[pos.x, pos.y] = true;
             }
         }
 
@@ -64,6 +61,12 @@ namespace Albot.Snake {
                     if (blocked[xb, yb])
                         b.Add(new Position() { x = xb, y = yb });
             return b;
+        }
+
+        private bool CoordsInBounds(int x, int y) {
+            if (x < 0 || y < 0 || x >= boardWidth || y >= boardHeight)
+                return false;
+            return true;
         }
 
         #region debug
