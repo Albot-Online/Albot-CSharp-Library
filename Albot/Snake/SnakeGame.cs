@@ -10,7 +10,7 @@ namespace Albot.Snake {
     /// A high level Snake library which sets up the connection and provides basic logic.
     /// </summary>
     public class SnakeGame : AlbotConnection {
-
+        
         SnakeBoard currentBoard;
 
         /// <summary>
@@ -43,24 +43,35 @@ namespace Albot.Snake {
         }
 
         /// <summary>
-        /// Returns the possible moves for both the player and the enemy based off only the directions. 
+        /// Returns the possible moves for both the player and the enemy, based off directions only. 
         /// </summary>
         public PossibleMoves GetPossibleMoves(SnakeBoard board) {
             string request = SnakeJsonHandler.CreateCommandPossibleMoves(board);
             string response = SendCommandReceiveState(request);
             return SnakeJsonHandler.ParseResponsePossibleMoves(response);
         }
-        /*
+
+        /// <summary>
+        /// Simulate a move where only the player moves.
+        /// </summary>
+        /// <param name="board">The board which the move is applied to.</param>
+        /// <param name="move">The direction in which you want to simulate a move.</param>
+        /// <returns>The board where the move has been applied.</returns>
         public SnakeBoard SimulatePlayerMove(SnakeBoard board, string move) {
-            MovesToSimulate simMoves = new MovesToSimulate() { PlayerMove = move };
+            MovesToSimulate simMoves = new MovesToSimulate() { playerMove = move };
             return HandleSimulateMove(board, simMoves);
         }
 
+        /// <summary>
+        /// Simulate a move where only the enemy moves.
+        /// </summary>
+        /// <param name="board">The board which the move is applied to.</param>
+        /// <param name="move">The direction in which you want to simulate a move.</param>
+        /// <returns>The board where the move has been applied.</returns>
         public SnakeBoard SimulateEnemyMove(SnakeBoard board, string move) {
-            MovesToSimulate simMoves = new MovesToSimulate() {EnemyMove = move};
+            MovesToSimulate simMoves = new MovesToSimulate() {enemyMove = move};
             return HandleSimulateMove(board, simMoves);
         }
-        */
 
         /// <summary>
         /// Returns a board where the moves have been applied.

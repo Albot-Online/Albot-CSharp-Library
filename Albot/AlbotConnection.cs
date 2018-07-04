@@ -12,7 +12,7 @@ namespace Albot {
         private NetworkStream stream;
         private bool gameOver = false;
         private int winner;
-        private const int bufferSize = 1024;
+        private const int bufferSize = 2048;
 
         /// <summary>
         /// Creates and handles the TCP connection with the client.

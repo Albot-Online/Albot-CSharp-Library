@@ -22,7 +22,7 @@ namespace Albot.Snake {
                     JObject.FromObject(board.enemyPlacement))
                 );
             //if (includeBlocked)
-            jObject.Add(new JProperty(JProtocol.blocked, JArray.FromObject(board.GetBlockedList())));
+            jObject.Add(new JProperty(JProtocol.blocked, JArray.FromObject(board.GetBlockedList(false))));
             return jObject;
         }
 
@@ -52,7 +52,7 @@ namespace Albot.Snake {
             JObject jsonCommand = new JObject(
                 new JProperty(Constants.Fields.action, Actions.simMove),
                 JObject.FromObject(simMoves, serializer).Children(),
-                new JProperty(JProtocol.board, SerializeBoard(board))   //.Children()
+                new JProperty(JProtocol.board, SerializeBoard(board))
                 );
             //Console.WriteLine("Simulate Command: \n" + jsonCommand + "\n");
 
