@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Albot.GridBased;
+
 namespace Albot.Connect4 {
 
     /// <summary>

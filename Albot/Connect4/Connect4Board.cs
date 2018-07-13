@@ -1,4 +1,5 @@
 ﻿using static Albot.Connect4.Connect4Constants.Fields;
+using Albot.GridBased;
 
 namespace Albot.Connect4 {
     public class Connect4Board : GridBoard {

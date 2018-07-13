@@ -1,4 +1,10 @@
 ﻿namespace Albot {
+
+    /// <summary>
+    /// Whether game is over and if so, who the winner is.
+    /// </summary>
+    public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
+
     public static class Constants {
         
         public static class Fields {

@@ -71,7 +71,10 @@ namespace Albot {
         /// </summary>
         public void RestartGame() {
             Console.WriteLine("Restarting game...");
+            //System.Threading.Thread.Sleep(1000);
             SendCommand(Constants.Actions.restartGame);
+            gameOver = false;
+            //System.Threading.Thread.Sleep(1000);
         }
 
         /// <summary>
@@ -107,8 +110,4 @@ namespace Albot {
         }
 
     }
-    /// <summary>
-    /// Whether game is over and if so, who the winner is.
-    /// </summary>
-    public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
 }

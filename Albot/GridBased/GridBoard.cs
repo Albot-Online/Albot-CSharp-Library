@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Albot {
+namespace Albot.GridBased {
     public class GridBoard : IGameState {
 
         public readonly int WIDTH, HEIGHT;
@@ -25,10 +25,10 @@ namespace Albot {
             HEIGHT = height;
             this.grid = (int[,])grid.Clone();
         }
-
-        public GridBoard(int width, int height, GridBoard gridBoard) {
-            WIDTH = width;
-            HEIGHT = height;
+        // Deep copy
+        public GridBoard(GridBoard gridBoard) {
+            WIDTH = gridBoard.WIDTH;
+            HEIGHT = gridBoard.HEIGHT;
             this.grid = (int[,])gridBoard.grid.Clone();
         }
 
