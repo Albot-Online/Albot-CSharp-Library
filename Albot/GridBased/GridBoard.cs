@@ -32,6 +32,15 @@ namespace Albot.GridBased {
             this.grid = (int[,])gridBoard.grid.Clone();
         }
 
+        /// <summary>
+        /// Gives the value of a cell. (0,0) is in the top left corner.
+        /// </summary>
+        /// <param name="x">Zero based x index</param>
+        /// <param name="y">Zero based y index</param>
+        /// <returns>1 if player, -1 if enemy, 0 if empty</returns>
+        public int GetCell(int x, int y) {
+            return grid[x, y];
+        }
 
         public string Serialize() {
             string boardString = "";
@@ -44,13 +53,13 @@ namespace Albot.GridBased {
         }
 
         #region Util
-        public void IterateBoard(Action<int, int> cellFunc) {
+        private void IterateBoard(Action<int, int> cellFunc) {
             for (int y = 0; y < HEIGHT; y++)
                 for (int x = 0; x < WIDTH; x++)
                     cellFunc(x, y);
         }
 
-        public void IterateBoard(Action<int, int> cellFunc, Action<int> rowFunc) {
+        private void IterateBoard(Action<int, int> cellFunc, Action<int> rowFunc) {
             for (int y = 0; y < 6; y++) {
                 for (int x = 0; x < 7; x++)
                     cellFunc(x, y);
