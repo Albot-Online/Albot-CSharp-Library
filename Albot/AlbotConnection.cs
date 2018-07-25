@@ -40,9 +40,9 @@ namespace Albot {
 
             } while (incomingData == null);// Blocking receive
 
-            HandleGameOverCheck(incomingData);
-
             //Console.WriteLine("Data received: \n" + incomingData + "\n\n");
+
+            HandleGameOverCheck(incomingData);
 
             return incomingData;
         }
