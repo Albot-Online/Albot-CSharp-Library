@@ -98,6 +98,14 @@ namespace Albot.Snake {
         }
 
         /// <summary>
+        /// Sends a command to restart the game.
+        /// </summary>
+        public new void RestartGame() {
+            currentBoard = null;
+            base.RestartGame();
+        }
+
+        /// <summary>
         /// Plays an entire game by making moves returned by the function provided. 
         /// </summary>
         public void PlayGame(Func<SnakeBoard, string> decideMove, bool autoRestart) {

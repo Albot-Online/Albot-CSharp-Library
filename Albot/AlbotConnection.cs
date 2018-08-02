@@ -34,13 +34,14 @@ namespace Albot {
 
             Int32 bytes = stream.Read(data, 0, data.Length);
 
+            Console.WriteLine("Receiving data...");
             string incomingData;
             do {
                 incomingData = Encoding.Default.GetString(data, 0, bytes);
 
             } while (incomingData == null);// Blocking receive
 
-            //Console.WriteLine("Data received: \n" + incomingData + "\n\n");
+            Console.WriteLine("Data received: \n" + incomingData);
 
             HandleGameOverCheck(incomingData);
 
@@ -53,6 +54,7 @@ namespace Albot {
         /// Sends the string to the client as a raw string.
         /// </summary>
         public void SendCommand(string command) {
+            Console.WriteLine("Command sent: \n" + command);
             byte[] response = Encoding.Default.GetBytes(command);
             stream.Write(response, 0, response.Length);
         }
