@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Albot.Connect4 {
+namespace Albot.GridBased.Connect4 {
     public static class Connect4Constants {
         
         public static class Fields {

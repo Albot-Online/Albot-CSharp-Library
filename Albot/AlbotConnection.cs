@@ -9,6 +9,7 @@ namespace Albot {
     /// </summary>
     public class AlbotConnection {
 
+        private TcpClient client;
         private NetworkStream stream;
         private bool gameOver = false;
         private int winner;
@@ -19,7 +20,7 @@ namespace Albot {
         /// </summary>
         public AlbotConnection(string ip = "127.0.0.1", int port = 4000) {
 
-            TcpClient client = new TcpClient(ip, port) {
+            client = new TcpClient(ip, port) {
                 ReceiveBufferSize = bufferSize
                 //SendBufferSize = 10000
             };
@@ -32,16 +33,17 @@ namespace Albot {
         public string ReceiveState() {
             Byte[] data = new byte[bufferSize];
 
-            Int32 bytes = stream.Read(data, 0, data.Length);
+            //Console.WriteLine("Receiving data...");
 
-            Console.WriteLine("Receiving data...");
+            Int32 bytes = stream.Read(data, 0, data.Length);
+            
             string incomingData;
             do {
                 incomingData = Encoding.Default.GetString(data, 0, bytes);
 
             } while (incomingData == null);// Blocking receive
 
-            Console.WriteLine("Data received: \n" + incomingData);
+            //Console.WriteLine("Data received: \n" + incomingData);
 
             HandleGameOverCheck(incomingData);
 
@@ -54,9 +56,10 @@ namespace Albot {
         /// Sends the string to the client as a raw string.
         /// </summary>
         public void SendCommand(string command) {
-            Console.WriteLine("Command sent: \n" + command);
+            //Console.WriteLine("Sending command: \n" + command);
             byte[] response = Encoding.Default.GetBytes(command);
             stream.Write(response, 0, response.Length);
+            //Console.WriteLine("Command sent!");
         }
 
         //public string SendCommandRecvState(int command) { return SendCommandRecvState(command.ToString()); }
@@ -109,6 +112,11 @@ namespace Albot {
 
                 gameOver = true;
             }
+        }
+
+        // Hopefully makes sure the process is killed properly when program crashes. 
+        internal void Terminate() {
+            client.Close();
         }
 
     }

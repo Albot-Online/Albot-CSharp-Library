@@ -9,22 +9,22 @@
         
         public static class Fields {
             public const string board = "board";
-            public const string evaluate = "Evaluate";
-            public const string possibleMoves = "PossMoves";
-            public const string move = "Move";
-            public const string player = "Player";
-            public const string action = "Action";
-            public const string winner = "Winner";
-            public const string gameOver = "GameOver";//\n";
+            public const string evaluate = "evaluate";
+            public const string possibleMoves = "possMoves";
+            public const string move = "move";
+            public const string player = "player";
+            public const string action = "action";
+            public const string winner = "winner";
+            public const string gameOver = "gameOver";
             public const string boardState = "boardState";
         }
 
         public static class Actions {
-            public const string restartGame = "RestartGame";
-            public const string makeMove = "MakeMove";
-            public const string simMove = "SimulateMove";
-            public const string evalBoard = "EvaluateBoard";
-            public const string getPossMoves = "GetPossibleMoves";
+            public const string restartGame = "restartGame";
+            public const string makeMove = "makeMove";
+            public const string simMove = "simulateMove";
+            public const string evalBoard = "evaluateBoard";
+            public const string getPossMoves = "getPossibleMoves";
         }
 
     }

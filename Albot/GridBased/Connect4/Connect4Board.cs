@@ -1,7 +1,6 @@
-﻿using static Albot.Connect4.Connect4Constants.Fields;
-using Albot.GridBased;
+﻿using static Albot.GridBased.Connect4.Connect4Constants.Fields;
 
-namespace Albot.Connect4 {
+namespace Albot.GridBased.Connect4 {
     public class Connect4Board : GridBoard {
 
         public Connect4Board(string input) : base(boardWidth, boardHeight, input) {

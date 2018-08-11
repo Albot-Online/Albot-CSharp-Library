@@ -10,12 +10,10 @@ namespace Albot.GridBased {
 
     class GridBasedJsonHandler{
 
-        private const string BOARD = "Board";
-
         internal static string CreateCommandPossibleMoves(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.getPossMoves),
-                new JProperty(BOARD, board.Serialize())
+                new JProperty(Fields.board, board.Serialize())
                 );
             return jsonCommand.ToString();
         }
@@ -23,7 +21,7 @@ namespace Albot.GridBased {
         internal static string CreateCommandSimulateMove(GridBoard board, int player, int move) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.simMove),
-                new JProperty(BOARD, board.Serialize()),
+                new JProperty(Fields.board, board.Serialize()),
                 new JProperty(Fields.player, player.ToString()),
                 new JProperty(Fields.move, move)
                 );
@@ -33,7 +31,7 @@ namespace Albot.GridBased {
         internal static string CreateCommandEvaluateBoard(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.evalBoard),
-                new JProperty(BOARD, board.Serialize())
+                new JProperty(Fields.board, board.Serialize())
                 );
             return jsonCommand.ToString();
         }
@@ -41,7 +39,7 @@ namespace Albot.GridBased {
         internal static GridBoard ParseResponseState(string response, int width, int height) {
             JObject jResponse = JObject.Parse(response);
             //Console.WriteLine(jResponse.ToString());
-            string serializedGrid = jResponse.GetValue(BOARD).ToString();
+            string serializedGrid = jResponse.GetValue(Fields.board).ToString();
             //Console.WriteLine("Serialized grid: " + serializedGrid);
             return new GridBoard(width, height, serializedGrid);
         }
