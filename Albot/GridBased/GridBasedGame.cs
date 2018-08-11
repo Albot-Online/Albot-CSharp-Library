@@ -67,7 +67,6 @@ namespace Albot.GridBased {
             
             string jCommand = CreateCommandPossibleMoves(board);
             string moves = SendCommandReceiveState(jCommand);
-            //Console.WriteLine("Response possmoves: \n" + moves + "\n");
             return ParseResponsePossibleMoves(moves);
         }
 
