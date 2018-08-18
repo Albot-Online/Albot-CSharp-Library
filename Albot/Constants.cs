@@ -3,7 +3,7 @@
     /// <summary>
     /// Whether game is over and if so, who the winner is.
     /// </summary>
-    public enum BoardState { PlayerWon, EnemyWon, Draw, Ongoing }
+    public enum BoardState { playerWon, enemyWon, draw, ongoing }
 
     public static class Constants {
         
