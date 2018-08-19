@@ -23,7 +23,7 @@ namespace Albot.GridBased {
             if (stateUpToDate)
                 return state;
 
-            state = ReceiveState();
+            state = ReceiveMessage();
             stateUpToDate = true;
             return state;
         }
@@ -66,7 +66,7 @@ namespace Albot.GridBased {
         public List<int> GetPossibleMoves(GridBoard board) {
             
             string jCommand = CreateCommandPossibleMoves(board);
-            string moves = SendCommandReceiveState(jCommand);
+            string moves = SendCommandReceiveMessage(jCommand);
             return ParseResponsePossibleMoves(moves);
         }
 
@@ -81,7 +81,7 @@ namespace Albot.GridBased {
             
             string jCommand = CreateCommandSimulateMove(board, player, move);
 
-            string state = SendCommandReceiveState(jCommand);
+            string state = SendCommandReceiveMessage(jCommand);
             return ParseResponseState(state, width, height);
         }
 
@@ -92,7 +92,7 @@ namespace Albot.GridBased {
             
             string jCommand = CreateCommandEvaluateBoard(board);
 
-            string winner = SendCommandReceiveState(jCommand);
+            string winner = SendCommandReceiveMessage(jCommand);
             return ParseResponseEvaluateBoard(winner);
         }
         

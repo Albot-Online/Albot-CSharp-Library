@@ -25,7 +25,7 @@ namespace Albot.Snake {
         /// </summary>
         public SnakeBoard GetNextBoard() {
 
-            string state = ReceiveState(); // Receive before check for game over
+            string state = ReceiveMessage(); // Receive before check for game over
 
             if (GameOver())
                 return null;
@@ -47,7 +47,7 @@ namespace Albot.Snake {
         /// </summary>
         public PossibleMoves GetPossibleMoves(SnakeBoard board) {
             string request = SnakeJsonHandler.CreateCommandPossibleMoves(board);
-            string response = SendCommandReceiveState(request);
+            string response = SendCommandReceiveMessage(request);
             return SnakeJsonHandler.ParseResponsePossibleMoves(response);
         }
 
@@ -83,7 +83,7 @@ namespace Albot.Snake {
 
         private SnakeBoard HandleSimulateMove(SnakeBoard board, MovesToSimulate simMoves) {
             string request = SnakeJsonHandler.CreateCommandSimulate(board, simMoves);
-            string response = SendCommandReceiveState(request);
+            string response = SendCommandReceiveMessage(request);
             return SnakeJsonHandler.ParseResponseSimulate(response);
         }
 
@@ -92,7 +92,7 @@ namespace Albot.Snake {
         /// </summary>
         public BoardState EvaluateBoard(SnakeBoard board) {
             string request = SnakeJsonHandler.CreateCommandEvaluate(board);
-            string response = SendCommandReceiveState(request);
+            string response = SendCommandReceiveMessage(request);
 
             return SnakeJsonHandler.ParseResponseEvaluate(response);
         }

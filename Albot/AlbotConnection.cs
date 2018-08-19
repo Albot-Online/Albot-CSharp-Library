@@ -28,9 +28,9 @@ namespace Albot {
         }
         
         /// <summary>
-        /// Blocking receive call for new state as raw string.
+        /// Blocking receive call for new TCP message as raw string.
         /// </summary>
-        public string ReceiveState() {
+        public string ReceiveMessage() {
             Byte[] data = new byte[bufferSize];
 
             //Console.WriteLine("Receiving data...");
@@ -66,9 +66,9 @@ namespace Albot {
         /// <summary>
         /// Sends command and then does a blocking receive for a response.
         /// </summary>
-        public string SendCommandReceiveState(string command) {
+        public string SendCommandReceiveMessage(string command) {
             SendCommand(command);
-            return ReceiveState();
+            return ReceiveMessage();
         }
 
         /// <summary>
