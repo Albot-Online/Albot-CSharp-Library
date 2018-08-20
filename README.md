@@ -12,6 +12,9 @@ Following is a short example of the C# Library being put to use on the [Snake](h
 For exact information of how to use the library see the [documentation Wiki](https://github.com/Albot-Online/Albot-CSharp-Library/wiki).
 
 ```cs
+using System;
+using System.Collections.Generic;
+
 using Albot.Snake;
 
 namespace SnakeBotDemo {
