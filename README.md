@@ -14,8 +14,8 @@ For exact information of how to use the library see the [documentation Wiki](htt
 ```cs
 using Albot.Snake;
 
-namespace SnakeBot {
-    class Program {
+namespace SnakeBotDemo {
+    class ProgramDemo {
 
         static void Main(string[] args) {
             SnakeGame game = new SnakeGame(); // Connects you to the client
