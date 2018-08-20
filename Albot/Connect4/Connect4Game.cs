@@ -1,6 +1,7 @@
 ﻿using System;
+using Albot.GridBased;
 
-namespace Albot.GridBased.Connect4 {
+namespace Albot.Connect4 {
 
     /// <summary>
     /// A high level Connect4 library which sets up the connection and provides basic logic.

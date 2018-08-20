@@ -17,6 +17,10 @@ namespace Albot.Snake {
         public struct Position {
             public int x;
             public int y;
+
+            public override string ToString() {
+                return "{'x': " + x + ", 'y': " + y + "}";
+            }
         }
 
         public struct PossibleMoves {

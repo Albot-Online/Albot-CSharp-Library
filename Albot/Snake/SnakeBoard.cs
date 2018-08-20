@@ -10,7 +10,10 @@ namespace Albot.Snake {
     public class SnakeBoard {
         // Optimize? (creating new state every update)
 
-        internal Placement playerPlacement, enemyPlacement;
+        /// <summary>
+        /// The placements of the players contain their positions and directions.
+        /// </summary>
+        public Placement player, enemy;
         private bool[,] blocked = new bool[boardWidth, boardHeight];
 
         public SnakeBoard(SnakeBoard board, BoardStruct boardStruct) {
@@ -23,8 +26,8 @@ namespace Albot.Snake {
         // Add constructors for users?
 
         private void ExtractResponseInfo(BoardStruct response) {
-            playerPlacement = response.player;
-            enemyPlacement = response.enemy;
+            player = response.player;
+            enemy = response.enemy;
             /* Does not work well with Evaluate
             if(CoordsInBounds(playerPlacement.x, playerPlacement.y))
                 blocked[playerPlacement.x, playerPlacement.y] = true;
@@ -51,15 +54,15 @@ namespace Albot.Snake {
         public bool CellBlocked(int x, int y) {
             if (x < 0 || y < 0 || x >= boardWidth || y >= boardHeight)
                 return true; // Out of bounds
-            if ((x == playerPlacement.x && y == playerPlacement.y) || (x == enemyPlacement.x && y == enemyPlacement.y))
+            if ((x == player.x && y == player.y) || (x == enemy.x && y == enemy.y))
                 return true;
             return blocked[x, y];
         }
 
-        public Position GetPlayerPosition() { return new Position() { x = playerPlacement.x, y = playerPlacement.y }; }
-        public Position GetEnemyPosition() { return new Position() { x = enemyPlacement.x, y = enemyPlacement.y }; }
-        public string GetPlayerDirection() { return playerPlacement.dir; }
-        public string GetEnemyDirection() { return enemyPlacement.dir; }
+        public Position GetPlayerPosition() { return new Position() { x = player.x, y = player.y }; }
+        public Position GetEnemyPosition() { return new Position() { x = enemy.x, y = enemy.y }; }
+        public string GetPlayerDirection() { return player.dir; }
+        public string GetEnemyDirection() { return enemy.dir; }
 
         /// <summary>
         /// Returns a list of occupied positions.
@@ -104,9 +107,9 @@ namespace Albot.Snake {
             Console.WriteLine("* * * * * * * * * * * *");
         }
         private string SquareInfo(int x, int y) {
-            if (x == playerPlacement.x && y == playerPlacement.y)
+            if (x == player.x && y == player.y)
                 return "P";
-            if (x == enemyPlacement.x && y == enemyPlacement.y)
+            if (x == enemy.x && y == enemy.y)
                 return "E";
             return blocked[x, y] ? "X" : "0";
         }

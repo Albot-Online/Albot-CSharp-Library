@@ -17,9 +17,9 @@ namespace Albot.Snake {
         private static JObject SerializeBoard(SnakeBoard board) {
             JObject jObject = new JObject(
                 new JProperty(JProtocol.player,
-                    JObject.FromObject(board.playerPlacement)),
+                    JObject.FromObject(board.player)),
                 new JProperty(JProtocol.enemy,
-                    JObject.FromObject(board.enemyPlacement))
+                    JObject.FromObject(board.enemy))
                 );
             //if (includeBlocked)
             jObject.Add(new JProperty(JProtocol.blocked, JArray.FromObject(board.GetBlockedList(false))));
