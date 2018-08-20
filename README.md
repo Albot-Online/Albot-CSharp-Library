@@ -24,7 +24,7 @@ namespace SnakeBotDemo {
             while (game.GameOver() == false) {
                 SnakeBoard board = game.GetNextBoard();
 
-                // Since this gives a struct with both playerMoves and enemyMoves we specify playerMoves. 
+                // Since this gives a struct with both playerMoves and enemyMoves, we specify playerMoves. 
                 List<string> possibleMoves = game.GetPossibleMoves(board).playerMoves;
 
                 int randomIndex = rnd.Next(possibleMoves.Count);
