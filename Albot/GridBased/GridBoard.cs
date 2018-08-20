@@ -83,7 +83,15 @@ namespace Albot.GridBased {
             return boardString;
         }
 
-        public void PrintBoard() { Console.WriteLine(this.ToString()); }
+        /// <summary>
+        /// Prints the board to the console. 
+        /// </summary>
+        /// <param name="boardTitle">Optional title for the printed board.</param>
+        public void PrintBoard(string boardTitle = "") {
+            Console.WriteLine("* * * * * *" + boardTitle + "* * * * * *");
+            Console.Write(ToString());
+            Console.WriteLine("* * * * * * * * * * * *");
+        }
         #endregion
 
 

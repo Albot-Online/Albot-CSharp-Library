@@ -93,12 +93,22 @@ namespace Albot.Snake {
             }
             return s;
         }
+
+        /// <summary>
+        /// Prints the board to the console. 
+        /// </summary>
+        /// <param name="boardName">Optional title for the printed board.</param>
+        public void PrintBoard(string boardName = "") {
+            Console.WriteLine("* * * * * *" + boardName + "* * * * * *");
+            Console.Write(ToString());
+            Console.WriteLine("* * * * * * * * * * * *");
+        }
         private string SquareInfo(int x, int y) {
             if (x == playerPlacement.x && y == playerPlacement.y)
                 return "P";
             if (x == enemyPlacement.x && y == enemyPlacement.y)
                 return "E";
-            return Convert.ToInt32(blocked[x, y]) + "";
+            return blocked[x, y] ? "X" : "0";
         }
         #endregion
 
