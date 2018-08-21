@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace Albot.GridBased {
-    public class GridBoard : IGameState {
+    public class GridBoard {
 
         public readonly int WIDTH, HEIGHT;
         internal int[,] grid;
@@ -42,7 +42,15 @@ namespace Albot.GridBased {
             return grid[x, y];
         }
 
-        public string Serialize() {
+        internal static int[,] Transpose(int[,] grid, int widthOriginal, int heightOriginal) {
+            int[,] gridNew = new int[heightOriginal, widthOriginal];
+            for (int y = 0; y < heightOriginal; y++)
+                for (int x = 0; x < widthOriginal; x++)
+                    gridNew[y, x] = grid[x, y];
+            return gridNew;
+        }
+
+        /*public string Serialize() {
             string boardString = "";
 
             for (int y = 0; y < HEIGHT; y++)
@@ -50,7 +58,7 @@ namespace Albot.GridBased {
                     boardString += grid[x, y] + " ";
 
             return boardString.Remove(boardString.Length - 1);
-        }
+        }*/
 
         #region Util
         private void IterateBoard(Action<int, int> cellFunc) {
