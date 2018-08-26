@@ -9,8 +9,8 @@ namespace Albot {
     /// </summary>
     public class AlbotConnection {
 
-        private TcpClient client;
-        private NetworkStream stream;
+        private static TcpClient client;
+        private static NetworkStream stream;
         private bool gameOver = false;
         private int winner;
         private const int bufferSize = 2048;
@@ -20,11 +20,16 @@ namespace Albot {
         /// </summary>
         public AlbotConnection(string ip = "127.0.0.1", int port = 4000) {
 
-            client = new TcpClient(ip, port) {
-                ReceiveBufferSize = bufferSize
-                //SendBufferSize = 10000
-            };
-            stream = client.GetStream();
+            try {
+                client = new TcpClient(ip, port) {
+                    ReceiveBufferSize = bufferSize
+                    //SendBufferSize = 10000
+                };
+                stream = client.GetStream();
+            } catch(Exception e) {
+                Console.WriteLine("Could not establish TCP connection to Albot. \n" + e);
+                Terminate();
+            }
         }
         
         /// <summary>
@@ -35,19 +40,25 @@ namespace Albot {
 
             //Console.WriteLine("Receiving data...");
 
-            Int32 bytes = stream.Read(data, 0, data.Length);
-            
-            string incomingData;
-            do {
-                incomingData = Encoding.Default.GetString(data, 0, bytes);
+            try {
+                Int32 bytes = stream.Read(data, 0, data.Length);
 
-            } while (incomingData == null);// Blocking receive
+                string incomingData;
+                do {
+                    incomingData = Encoding.Default.GetString(data, 0, bytes);
 
-            //Console.WriteLine("Data received: \n" + incomingData);
+                } while (incomingData == null);// Blocking receive
 
-            HandleGameOverCheck(incomingData);
+                //Console.WriteLine("Data received: \n" + incomingData);
 
-            return incomingData;
+                HandleGameOverCheck(incomingData);
+
+                return incomingData;
+            } catch(Exception e) {
+                Console.WriteLine("Could not receive message from TCP connection. \n" + e);
+                Terminate();
+            }
+            return ""; // Unreachable
         }
 
         // Make move, should not be blocking? (It should be async)
@@ -57,8 +68,13 @@ namespace Albot {
         /// </summary>
         public void SendCommand(string command) {
             //Console.WriteLine("Sending command: \n" + command);
-            byte[] response = Encoding.Default.GetBytes(command);
-            stream.Write(response, 0, response.Length);
+            try {
+                byte[] response = Encoding.Default.GetBytes(command);
+                stream.Write(response, 0, response.Length);
+            } catch(Exception e) {
+                Console.WriteLine("Could not send message with TCP connection. \n" + e);
+                Terminate();
+            }
             //Console.WriteLine("Command sent!");
         }
 
@@ -76,10 +92,8 @@ namespace Albot {
         /// </summary>
         public void RestartGame() {
             Console.WriteLine("Restarting game...");
-            //System.Threading.Thread.Sleep(1000);
             SendCommand(Constants.Actions.restartGame);
             gameOver = false;
-            //System.Threading.Thread.Sleep(1000);
         }
 
         /// <summary>
@@ -115,8 +129,10 @@ namespace Albot {
         }
 
         // Hopefully makes sure the process is killed properly when program crashes. 
-        internal void Terminate() {
-            client.Close();
+        static internal void Terminate() {
+            client.GetStream().Close();
+            client.Close(); // Supposed to handle stream as well
+            Environment.Exit(1);
         }
 
     }

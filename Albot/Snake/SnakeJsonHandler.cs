@@ -73,26 +73,26 @@ namespace Albot.Snake {
 
         #region ParseResponse
         internal static BoardStruct ParseResponseState(string response) {
-            JObject jResponse = JObject.Parse(response);
+            JObject jResponse = JsonHandler.TryParse(response);
             //Console.WriteLine("Response state: " + "\n" + jResponse.ToString());
             return jResponse.ToObject<BoardStruct>();
         }
         
         internal static PossibleMoves ParseResponsePossibleMoves(string response) {
-            PossibleMoves possMoves = JsonConvert.DeserializeObject<PossibleMoves>(response);
+            PossibleMoves possMoves = JsonHandler.TryDeserialize<PossibleMoves>(response);
             //Console.WriteLine("Response possMoves: " + "\n" + JObject.Parse(response).ToString());
             return possMoves;
         }
         
         internal static SnakeBoard ParseResponseSimulate(string response) {
             //Console.WriteLine(response);
-            JObject jBoard = JObject.Parse(response);
+            JObject jBoard = JsonHandler.TryParse(response);
             //Console.WriteLine("Response simulate: \n" + jBoard.ToString());
             return new SnakeBoard(jBoard.ToObject<BoardStruct>());
         }
 
         internal static BoardState ParseResponseEvaluate(string response) {
-            JObject jState = JObject.Parse(response);
+            JObject jState = JsonHandler.TryParse(response);
             //Console.WriteLine("Response evaluate: \n" + jState + "\n");
             string boardState = jState.GetValue(Constants.Fields.boardState).ToObject<string>();
             return (BoardState) Enum.Parse(typeof(BoardState), boardState);
