@@ -10,6 +10,7 @@ namespace Albot.GridBased {
 
     class GridBasedJsonHandler{
 
+        #region CreateCommand
         internal static string CreateCommandPossibleMoves(GridBoard board) {
             JObject jsonCommand = new JObject(
                 new JProperty(Fields.action, Actions.getPossMoves),
@@ -41,10 +42,11 @@ namespace Albot.GridBased {
             //Console.WriteLine("Command evaluate: \n" + jsonCommand.ToString() + "\n");
             return jsonCommand.ToString();
         }
+        #endregion
 
+        #region ParseResponse
         internal static GridBoard ParseResponseState(string response, int width, int height) {
-            //Console.WriteLine("Response state rawstr: \n" + response);
-            JObject jResponse = JObject.Parse(response);
+            JObject jResponse = JsonHandler.TryParse(response);
             //Console.WriteLine("Response state/simMove: \n" + jResponse.ToString() + "\n");
             string gridString = jResponse.GetValue(Fields.board).ToString();
             //Console.WriteLine("GridString: " + gridString);
@@ -55,17 +57,18 @@ namespace Albot.GridBased {
 
         // Optimize?
         internal static List<int> ParseResponsePossibleMoves(string response) {
-            JObject jResponse = JObject.Parse(response);
+            JObject jResponse = JsonHandler.TryParse(response);
             //Console.WriteLine("Response possmoves: \n" + jResponse.ToString() + "\n");
             string moves = jResponse.GetValue(Fields.possibleMoves).ToString();
             return JsonConvert.DeserializeObject<List<int>>(moves);
         }
         
         internal static BoardState ParseResponseEvaluateBoard(string response) {
-            JObject jResponse = JObject.Parse(response);
+            JObject jResponse = JsonHandler.TryParse(response);
             //Console.WriteLine("Response evaluate: \n" + jResponse.ToString() + "\n");
             string boardState = jResponse.GetValue(Fields.boardState).ToString();
             return (BoardState)Enum.Parse(typeof(BoardState), boardState);
         }
+        #endregion
     }
 }
