@@ -130,8 +130,10 @@ namespace Albot {
 
         // Hopefully makes sure the process is killed properly when program crashes. 
         static internal void Terminate() {
-            client.GetStream().Close();
-            client.Close(); // Supposed to handle stream as well
+            if (client != null) {
+                client.GetStream().Close();
+                client.Close(); // Supposed to handle stream as well
+            }
             Environment.Exit(1);
         }
 
