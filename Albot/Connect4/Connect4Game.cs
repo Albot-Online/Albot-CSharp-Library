@@ -7,6 +7,8 @@ namespace Albot.Connect4 {
     /// A high level Connect4 library which sets up the connection and provides basic logic.
     /// </summary>
     public class Connect4Game : GridBasedGame {
+
+        public Connect4Board currentBoard;
         
         public Connect4Game(string ip = "127.0.0.1", int port = 4000) : base(ip,port) {
             
@@ -16,25 +18,11 @@ namespace Albot.Connect4 {
             this.width = Connect4Constants.Fields.boardWidth;
             this.height = Connect4Constants.Fields.boardHeight;
         }
-
-        /// <summary>
-        /// Makes a move, then returns the next board. 
-        /// </summary>
-        public Connect4Board MakeMoveGetNextBoard(int move) {
-            MakeMove(move);
-            return GetNextBoard();
+        
+        protected override void UpdateCurrentBoard(GridBoard board) {
+            currentBoard = new Connect4Board(board);
         }
-
-        /// <summary>
-        /// Returns the next board.
-        /// </summary>
-        public new Connect4Board GetNextBoard() {
-            GridBoard gb = base.GetNextBoard();
-            if (GameOver())
-                return null;
-            return new Connect4Board(gb);
-        }
-
+        
         /// <summary>
         /// Returns a board in which the given move has been applied by the given player.
         /// </summary>
@@ -49,15 +37,14 @@ namespace Albot.Connect4 {
         public void PlayGame(Func<Connect4Board, int> decideMove, bool autoRestart) {
 
             while (true) {
-                Connect4Board newBoard = GetNextBoard();
-                if (GameOver()) {
+                if (WaitForNextGameState() != BoardState.ongoing) {
                     if (autoRestart) {
                         RestartGame();
                         continue;
                     } else
                         break;
                 }
-                int move = decideMove(newBoard);
+                int move = decideMove(currentBoard);
                 MakeMove(move);
             }
 

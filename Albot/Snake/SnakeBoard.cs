@@ -23,20 +23,13 @@ namespace Albot.Snake {
         public SnakeBoard(BoardStruct boardStruct) {
             ExtractResponseInfo(boardStruct);
         }
-        // Add constructors for users?
 
         private void ExtractResponseInfo(BoardStruct response) {
             player = response.player;
             enemy = response.enemy;
-            /* Does not work well with Evaluate
-            if(CoordsInBounds(playerPlacement.x, playerPlacement.y))
-                blocked[playerPlacement.x, playerPlacement.y] = true;
-            if(CoordsInBounds(enemyPlacement.x, enemyPlacement.y))
-                blocked[enemyPlacement.x, enemyPlacement.y] = true;
-            */
 
             foreach (Position pos in response.blocked) {
-                if(CoordsInBounds(pos.x, pos.y))
+                if (CoordsInBounds(pos.x, pos.y))
                     blocked[pos.x, pos.y] = true;
             }
         }

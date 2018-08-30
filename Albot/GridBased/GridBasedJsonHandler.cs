@@ -45,14 +45,9 @@ namespace Albot.GridBased {
         #endregion
 
         #region ParseResponse
-        internal static GridBoard ParseResponseState(string response, int width, int height) {
-            JObject jResponse = JsonHandler.TryParse(response);
-            //Console.WriteLine("Response state/simMove: \n" + jResponse.ToString() + "\n");
-            string gridString = jResponse.GetValue(Fields.board).ToString();
-            //Console.WriteLine("GridString: " + gridString);
-            int[,] grid = JsonConvert.DeserializeObject<int[,]>(gridString);
-            grid = GridBoard.Transpose(grid, height, width); // Received as [y, x], we want [x, y]
-            return new GridBoard(width, height, grid);
+        internal static GridBoard ParseResponseState(JObject jState, int width, int height) {
+
+            return ParseJsonGridBoard(jState, width, height);
         }
 
         // Optimize?
@@ -62,12 +57,22 @@ namespace Albot.GridBased {
             string moves = jResponse.GetValue(Fields.possibleMoves).ToString();
             return JsonConvert.DeserializeObject<List<int>>(moves);
         }
+
+        internal static GridBoard ParseResponseSimulateMove(string response, int width, int height) {
+            JObject jState = JsonHandler.TryParse(response);
+            return ParseJsonGridBoard(jState, width, height);
+        }
         
         internal static BoardState ParseResponseEvaluateBoard(string response) {
             JObject jResponse = JsonHandler.TryParse(response);
-            //Console.WriteLine("Response evaluate: \n" + jResponse.ToString() + "\n");
-            string boardState = jResponse.GetValue(Fields.boardState).ToString();
-            return (BoardState)Enum.Parse(typeof(BoardState), boardState);
+            return JsonHandler.FetchBoardState(jResponse);
+        }
+
+        private static GridBoard ParseJsonGridBoard(JObject jState, int width, int height) {
+            string gridString = jState.GetValue(Fields.board).ToString();
+            int[,] grid = JsonConvert.DeserializeObject<int[,]>(gridString);
+            grid = GridBoard.Transpose(grid, height, width); // Received as [y, x], we want [x, y]
+            return new GridBoard(width, height, grid);
         }
         #endregion
     }

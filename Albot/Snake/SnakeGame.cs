@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,7 +10,7 @@ namespace Albot.Snake {
     /// <summary>
     /// A high level Snake library which sets up the connection and provides basic logic.
     /// </summary>
-    public class SnakeGame : AlbotConnection {
+    public class SnakeGame : Game {
         
         SnakeBoard currentBoard;
 
@@ -17,21 +18,11 @@ namespace Albot.Snake {
         /// Initializes library and connects to the client.
         /// </summary>
         public SnakeGame(string ip = "127.0.0.1", int port = 4000) : base(ip, port) {
-            Console.WriteLine("Connected, waiting for game to start...");
         }
 
-        /// <summary>
-        /// Blocking receive call for next board. 
-        /// </summary>
-        public SnakeBoard GetNextBoard() {
-
-            string state = ReceiveMessage(); // Receive before check for game over
-
-            if (GameOver())
-                return null;
-            BoardStruct response = SnakeJsonHandler.ParseResponseState(state);
-            currentBoard = new SnakeBoard(currentBoard, response);
-            return currentBoard;
+        protected override void ExtractState(JObject jState) {
+            BoardStruct boardStruct = SnakeJsonHandler.ParseResponseState(jState);
+            currentBoard = new SnakeBoard(currentBoard, boardStruct);
         }
 
         /// <summary>
@@ -111,22 +102,20 @@ namespace Albot.Snake {
         public void PlayGame(Func<SnakeBoard, string> decideMove, bool autoRestart) {
 
             while (true) {
-                SnakeBoard newBoard = GetNextBoard();
-                if (GameOver()) {
+                if (WaitForNextGameState() != BoardState.ongoing) { // GameOver
                     if (autoRestart) {
                         RestartGame();
                         continue;
                     } else
                         break;
                 }
-                string move = decideMove(newBoard);
+
+                string move = decideMove(currentBoard);
                 MakeMove(move);
             }
             
         }
-
-
-
+        
     }
 
 }

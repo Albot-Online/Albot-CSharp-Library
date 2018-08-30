@@ -2,61 +2,41 @@
 using System;
 
 using static Albot.GridBased.GridBasedJsonHandler;
+using Newtonsoft.Json.Linq;
 
 namespace Albot.GridBased {
-    public abstract class GridBasedGame : AlbotConnection {
+    public abstract class GridBasedGame : Game {
 
         protected int width, height;
 
-        private string state;
-        private bool stateUpToDate = false;
+        private GridBoard currentBoard;
 
         public GridBasedGame(string ip = "127.0.0.1", int port = 4000) : base(ip, port) {
             InitGridDimensions();
-            Console.WriteLine("Connected, waiting for game to start...");
         }
 
         protected abstract void InitGridDimensions();
-        
-        // Multiple accesses for state would, without this, get into an infinite blocking receive.
-        private string GetState() {
-            if (stateUpToDate)
-                return state;
 
-            state = ReceiveMessage();
-            stateUpToDate = true;
-            return state;
+        protected override void ExtractState(JObject jState) {
+            currentBoard = ParseResponseState(jState, width, height);
+            UpdateCurrentBoard(currentBoard);
         }
 
-        public new bool GameOver() {
-            GetState();
-            return base.GameOver();
-        }
+        protected abstract void UpdateCurrentBoard(GridBoard board);
 
+
+        /// <summary>
+        /// Sends a command to restart the game.
+        /// </summary>
         public new void RestartGame() {
+            currentBoard = null;
             base.RestartGame();
-            stateUpToDate = false;
-        }
-
-        // Blocking receive 
-        public GridBoard GetNextBoard() {
-            string state = GetState();
-            if (GameOver())
-                return null;
-            return ParseResponseState(state, width, height);
         }
 
         /// <summary>
         /// Makes the move given.
         /// </summary>
         public void MakeMove(int move) {
-            stateUpToDate = false;
-
-            /*JObject jsonCommand = new JObject(
-                new JProperty(Fields.action, Actions.makeMove),
-                new JProperty(Fields.move, move)
-                );
-            */
             SendCommand(move.ToString());
         }
         
@@ -82,7 +62,7 @@ namespace Albot.GridBased {
             string jCommand = CreateCommandSimulateMove(board, player, move);
 
             string state = SendCommandReceiveMessage(jCommand);
-            return ParseResponseState(state, width, height);
+            return ParseResponseSimulateMove(state, width, height);
         }
 
         /// <summary>

@@ -11,8 +11,6 @@ namespace Albot {
 
         private static TcpClient client;
         private static NetworkStream stream;
-        private bool gameOver = false;
-        private int winner;
         private const int bufferSize = 2048;
 
         /// <summary>
@@ -22,10 +20,11 @@ namespace Albot {
 
             try {
                 client = new TcpClient(ip, port) {
-                    ReceiveBufferSize = bufferSize
-                    //SendBufferSize = 10000
+                    ReceiveBufferSize = bufferSize,
+                    SendBufferSize = bufferSize
                 };
                 stream = client.GetStream();
+                Console.WriteLine("Connected to Albot!");
             } catch(Exception e) {
                 Console.WriteLine("Could not establish TCP connection to Albot. \n" + e);
                 Terminate();
@@ -50,8 +49,6 @@ namespace Albot {
                 } while (incomingData == null);// Blocking receive
 
                 //Console.WriteLine("Data received: \n" + incomingData);
-
-                HandleGameOverCheck(incomingData);
 
                 return incomingData;
             } catch(Exception e) {
@@ -85,47 +82,6 @@ namespace Albot {
         public string SendCommandReceiveMessage(string command) {
             SendCommand(command);
             return ReceiveMessage();
-        }
-
-        /// <summary>
-        /// Sends a command to restart the game.
-        /// </summary>
-        public void RestartGame() {
-            Console.WriteLine("Restarting game...");
-            SendCommand(Constants.Actions.restartGame);
-            gameOver = false;
-        }
-
-        /// <summary>
-        /// Returns true if game is over, make sure to check this after receiving the state.
-        /// </summary>
-        public bool GameOver() {
-            return gameOver;
-        }
-        /// <summary>
-        /// Returns winner, 1 if you won, -1 if you lost, 0 if draw. Call this after GameOver() is true.
-        /// </summary>
-        public int GetWinner() {
-            return winner;
-        }
-
-        private void HandleGameOverCheck(string incomingData) {
-            incomingData = incomingData.Trim();
-            if (incomingData.Length >= 8 && incomingData.Substring(0, 8) == Constants.Fields.gameOver) {
-                if (incomingData.EndsWith("-1")) {
-                    winner = -1;
-                    Console.WriteLine("You lost!");
-                } else if (incomingData.EndsWith("1")) {
-                    winner = 1;
-                    Console.WriteLine("You won!");
-                } else if (incomingData.EndsWith("0")) {
-                    winner = 0;
-                    Console.WriteLine("Draw!");
-                } else
-                    Console.WriteLine("Game Over!");
-
-                gameOver = true;
-            }
         }
 
         // Hopefully makes sure the process is killed properly when program crashes. 

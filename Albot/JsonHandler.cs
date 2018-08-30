@@ -27,5 +27,16 @@ namespace Albot {
             }
             return default(T); // Unreachable
         }
+
+        internal static BoardState ExtractBoardState(ref JObject stateResponse) {
+            string boardState = stateResponse.GetValue(Constants.Fields.boardState).ToObject<string>();
+            stateResponse.Remove(Constants.Fields.boardState);
+            return (BoardState)Enum.Parse(typeof(BoardState), boardState);
+        }
+
+        internal static BoardState FetchBoardState(JObject stateResponse) {
+            string boardState = stateResponse.GetValue(Constants.Fields.boardState).ToObject<string>();
+            return (BoardState)Enum.Parse(typeof(BoardState), boardState);
+        }
     }
 }

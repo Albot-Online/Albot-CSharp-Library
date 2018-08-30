@@ -72,10 +72,9 @@ namespace Albot.Snake {
         #endregion
 
         #region ParseResponse
-        internal static BoardStruct ParseResponseState(string response) {
-            JObject jResponse = JsonHandler.TryParse(response);
+        internal static BoardStruct ParseResponseState(JObject jState) {
             //Console.WriteLine("Response state: " + "\n" + jResponse.ToString());
-            return jResponse.ToObject<BoardStruct>();
+            return jState.ToObject<BoardStruct>();
         }
         
         internal static PossibleMoves ParseResponsePossibleMoves(string response) {
@@ -94,8 +93,7 @@ namespace Albot.Snake {
         internal static BoardState ParseResponseEvaluate(string response) {
             JObject jState = JsonHandler.TryParse(response);
             //Console.WriteLine("Response evaluate: \n" + jState + "\n");
-            string boardState = jState.GetValue(Constants.Fields.boardState).ToObject<string>();
-            return (BoardState) Enum.Parse(typeof(BoardState), boardState);
+            return JsonHandler.FetchBoardState(jState);
         }
 
         #endregion
