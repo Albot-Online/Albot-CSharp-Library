@@ -28,7 +28,11 @@ namespace Albot.Snake {
             public const string enemyMove = "enemyMove";
             public const string playerMoves = "playerMoves";
             public const string enemyMoves = "enemyMoves";
-            
+
+            public const string simMoveDelta = "simulateMoveDelta";
+            public const string simPlayerMove = "simulatePlayerMove";
+            public const string simEnemyMove = "simulateEnemyMove";
+
         }
 
     }

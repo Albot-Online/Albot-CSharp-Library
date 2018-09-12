@@ -48,9 +48,19 @@ namespace Albot.Snake {
             return jsonCommand.ToString();
         }
 
-        internal static string CreateCommandSimulate(SnakeBoard board, MovesToSimulate simMoves) {
+        internal static string CreateCommandSimulateBoth(SnakeBoard board, MovesToSimulate simMoves) {
+            return CreateCommandSimulate(board, simMoves, Actions.simMove);
+        }
+        internal static string CreateCommandSimulatePlayer(SnakeBoard board, MovesToSimulate simMoves) {
+            return CreateCommandSimulate(board, simMoves, JProtocol.simPlayerMove);
+        }
+        internal static string CreateCommandSimulateEnemy(SnakeBoard board, MovesToSimulate simMoves) {
+            return CreateCommandSimulate(board, simMoves, JProtocol.simEnemyMove);
+        }
+
+        private static string CreateCommandSimulate(SnakeBoard board, MovesToSimulate simMoves, string action) {
             JObject jsonCommand = new JObject(
-                new JProperty(Constants.Fields.action, Actions.simMove),
+                new JProperty(Constants.Fields.action, action),
                 JObject.FromObject(simMoves, serializer).Children(),
                 new JProperty(JProtocol.board, SerializeBoard(board))
                 );

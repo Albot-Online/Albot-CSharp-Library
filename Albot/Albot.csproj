@@ -7,7 +7,7 @@
     <NeutralLanguage></NeutralLanguage>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageIconUrl>https://static1.squarespace.com/static/5999e701d2b857d71be9856c/t/5ad23d2b575d1f10b3c3fe49/1523727675794/chess%403x.png</PackageIconUrl>
-    <Version>1.0.12</Version>
+    <Version>1.0.13</Version>
     <Company>Albot.Online</Company>
     <Authors>Albot.Online</Authors>
     <Product>Albot.Online</Product>

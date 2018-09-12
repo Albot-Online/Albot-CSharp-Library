@@ -50,7 +50,8 @@ namespace Albot.Snake {
         /// <returns>The board where the move has been applied.</returns>
         public SnakeBoard SimulatePlayerMove(SnakeBoard board, string move) {
             MovesToSimulate simMoves = new MovesToSimulate() { playerMove = move };
-            return HandleSimulateMove(board, simMoves);
+            string request = SnakeJsonHandler.CreateCommandSimulatePlayer(board, simMoves);
+            return HandleSimulateMove(board, simMoves, request);
         }
 
         /// <summary>
@@ -61,7 +62,8 @@ namespace Albot.Snake {
         /// <returns>The board where the move has been applied.</returns>
         public SnakeBoard SimulateEnemyMove(SnakeBoard board, string move) {
             MovesToSimulate simMoves = new MovesToSimulate() {enemyMove = move};
-            return HandleSimulateMove(board, simMoves);
+            string request = SnakeJsonHandler.CreateCommandSimulateEnemy(board, simMoves);
+            return HandleSimulateMove(board, simMoves, request);
         }
 
         /// <summary>
@@ -69,11 +71,11 @@ namespace Albot.Snake {
         /// </summary>
         public SnakeBoard SimulateMoves(SnakeBoard board, string playerMove, string enemyMove) {
             MovesToSimulate simMoves = new MovesToSimulate() { playerMove = playerMove, enemyMove = enemyMove };
-            return HandleSimulateMove(board, simMoves);
+            string request = SnakeJsonHandler.CreateCommandSimulateBoth(board, simMoves);
+            return HandleSimulateMove(board, simMoves, request);
         }
 
-        private SnakeBoard HandleSimulateMove(SnakeBoard board, MovesToSimulate simMoves) {
-            string request = SnakeJsonHandler.CreateCommandSimulate(board, simMoves);
+        private SnakeBoard HandleSimulateMove(SnakeBoard board, MovesToSimulate simMoves, string request) {
             string response = SendCommandReceiveMessage(request);
             return SnakeJsonHandler.ParseResponseSimulate(response);
         }
