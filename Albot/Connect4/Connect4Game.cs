@@ -37,7 +37,7 @@ namespace Albot.Connect4 {
         public void PlayGame(Func<Connect4Board, int> decideMove, bool autoRestart) {
 
             while (true) {
-                if (WaitForNextGameState() != BoardState.ongoing) {
+                if (AwaitNextGameState() != BoardState.ongoing) {
                     if (autoRestart) {
                         RestartGame();
                         continue;

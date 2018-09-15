@@ -12,7 +12,7 @@ namespace Albot.Snake {
     /// </summary>
     public class SnakeGame : Game {
         
-        SnakeBoard currentBoard;
+        public SnakeBoard currentBoard;
 
         /// <summary>
         /// Initializes library and connects to the client.
@@ -104,7 +104,7 @@ namespace Albot.Snake {
         public void PlayGame(Func<SnakeBoard, string> decideMove, bool autoRestart) {
 
             while (true) {
-                if (WaitForNextGameState() != BoardState.ongoing) { // GameOver
+                if (AwaitNextGameState() != BoardState.ongoing) { // GameOver
                     if (autoRestart) {
                         RestartGame();
                         continue;
