@@ -24,7 +24,7 @@ namespace SnakeBotDemo {
             SnakeGame game = new SnakeGame(); // Connects you to the client
             Random rnd = new Random();
 
-            while (game.WaitForNextGameState() == BoardState.ongoing) { // Gets/Updates the board
+            while (game.awaitNextGameState() == BoardState.ongoing) { // Gets/Updates the board
 
                 // Since this gives a struct with both playerMoves and enemyMoves, we specify playerMoves. 
                 List<string> possibleMoves = game.GetPossibleMoves(game.currentBoard).playerMoves;
