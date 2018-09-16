@@ -44,7 +44,7 @@ This bot will simply connect to the client, look at what moves it currently has 
 
 ## Versioning
 
-  0.2b0
+  0.63
   
 ## Authors
 
