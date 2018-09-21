@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 using static Albot.Snake.SnakeConstants.Fields;
 using static Albot.Snake.SnakeStructs;
@@ -22,6 +22,15 @@ namespace Albot.Snake {
         }
         public SnakeBoard(BoardStruct boardStruct) {
             ExtractResponseInfo(boardStruct);
+        }
+        /// <summary>
+        /// Constructor for SnakeBoard which makes a deep copy of the passed board.
+        /// </summary>
+        /// <param name="board">Board to be deep copied.</param>
+        public SnakeBoard(SnakeBoard board) {
+            player = new Placement() { x = board.player.x, y = board.player.y,  dir = board.player.dir};
+            enemy = new Placement() { x = board.enemy.x, y = board.enemy.y, dir = board.enemy.dir };
+            blocked = board.blocked.Clone() as bool[,];
         }
 
         private void ExtractResponseInfo(BoardStruct response) {
